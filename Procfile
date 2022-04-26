@@ -1,1 +1,1 @@
-web: java -jar war.jar
+web: java -jar web.jar
