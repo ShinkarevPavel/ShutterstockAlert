@@ -28,6 +28,4 @@ public class ScheduleController {
         String pattern = cronPatternChangerService.changePattern(scheduleDto);
         applicationScheduler.reSchedule(pattern);
     }
-
-
 }
