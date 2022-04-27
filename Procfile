@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/web_Maven_Webapp-1.0-SNAPSHOT.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar /tmp/build_ad94e4d1/web/target/web-1.0-SNAPSHOT.jar
