@@ -113,5 +113,17 @@
                 </executions>
             </plugin>
         </plugins>
+
     </build>
+    <distributionManagement>
+        <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>nobody</id>
+            <name>nobody Repo</name>
+            <url>
+                https://git.heroku.com/shutter-alert.git
+            </url>
+            <layout>default</layout>
+        </repository>
+    </distributionManagement>
 </project>
