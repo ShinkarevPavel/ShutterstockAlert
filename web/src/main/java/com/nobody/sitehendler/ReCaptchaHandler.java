@@ -36,7 +36,7 @@ public class ReCaptchaHandler {
         username.sendKeys("pavelshynkarou");
         password.sendKeys("2Load2Reload2");
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(8));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(8).toMillis());
 
         /*ReCaptcha workaround!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
