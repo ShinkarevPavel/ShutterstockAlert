@@ -7,8 +7,8 @@
     <artifactId>web</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-<!--    <name>web Maven Webapp</name>-->
-    <name>web</name>
+    <name>web Maven Webapp</name>
+<!--    <name>web</name>-->
     <url>http://www.example.com</url>
 
 <!--    <parent>-->
