@@ -1,1 +1,1 @@
-web: java -jar target/ShutterStockRunner.jar
+web: java -jar target/web-1.0-SNAPSHOT.jar
