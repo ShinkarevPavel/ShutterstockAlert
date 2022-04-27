@@ -35,5 +35,7 @@ public class ShutterHeaderSaver {
         headers.put("Upgrade-Insecure-Requests", "1");
         headers.put("User-Agent", this.userAgent);
         headers.put("Content-Type", "text/html; charset=utf-8");
+
+
     }
 }

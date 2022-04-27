@@ -1,14 +1,14 @@
 package com.nobody.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 public class DailyEarningsDto extends BaseDto{
     private String date;
     private String totalDownloads;
