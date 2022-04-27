@@ -1,1 +1,1 @@
-web: java -jar tmp/codon/tmp/cache/.m2/repository/org/example/web/1.0-SNAPSHOT/web-1.0-SNAPSHOT.jar
+web: java -jar target/web-1.0-SNAPSHOT.jar
