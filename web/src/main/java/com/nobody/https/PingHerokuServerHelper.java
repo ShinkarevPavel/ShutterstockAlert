@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Component
 public class PingHerokuServerHelper {
@@ -25,15 +26,15 @@ public class PingHerokuServerHelper {
     @Scheduled(cron = "0 */29 * * * *")
     public void sendRequest() {
         HttpClient httpClient = HttpClients.custom()
-                .setDefaultRequestConfig(RequestConfig.custom()
-                        .setCookieSpec(CookieSpecs.STANDARD).build())
+//                .setDefaultRequestConfig(RequestConfig.custom()
+//                        .setCookieSpec(CookieSpecs.STANDARD).build())
                 .build();
         HttpUriRequest request = new HttpGet(URL);
         try {
             httpClient.execute(request);
+            logger.log(Level.INFO, "Ping was sent. Current time is " + LocalDateTime.now());
         } catch (IOException e) {
-            logger.log(Level.INFO, "PingHerokuServerHelper throws exception. Error. IO with Input stream working" + e.getMessage());
-            throw new ShutterStockResponseException("ResponseHendler throws exception. Error. IO with Input stream working" + e.getMessage());
+            throw new ShutterStockResponseException("PingHerokuServerHelper throws exception. Execution error " + e.getMessage());
         }
     }
 }

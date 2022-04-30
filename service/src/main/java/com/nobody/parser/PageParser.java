@@ -2,6 +2,9 @@ package com.nobody.parser;
 
 import com.nobody.dto.DailyEarningsDto;
 import com.nobody.exception.ShutterStockParseException;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,6 +19,8 @@ import java.util.Objects;
 
 @Component
 public class PageParser {
+
+    private final Logger logger = LogManager.getLogger();
 
     public DailyEarningsDto getData(String htmlPage) throws ShutterStockParseException{
         Document document = Jsoup.parse(htmlPage);

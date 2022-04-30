@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 
@@ -46,7 +47,7 @@ public class ResponseHendler {
             InputStream content = entity.getContent();
             response = IOUtils.toString(content, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            logger.log(Level.INFO, "ResponseHendler throws exception. Error. IO with Input stream working" + e.getMessage());
+            logger.log(Level.ERROR, "ResponseHendler throws exception. Error. IO with Input stream working" + e.getMessage());
             throw new ShutterStockResponseException("ResponseHendler throws exception. Error. IO with Input stream working" + e.getMessage());
         }
         return response;
@@ -54,6 +55,11 @@ public class ResponseHendler {
 
     private HttpUriRequest configRequest(HttpUriRequest request) {
         for (Map.Entry<String, String> header : saver.getHeaders().entrySet()) {
+            if (header.getKey().equals("Cookie")) {
+                if (header.getValue().length() == 0) {
+                    logger.log(Level.DEBUG, "Cookie is null. Current time " + LocalDateTime.now());
+                }
+            }
             request.setHeader(header.getKey(), header.getValue());
         }
         return request;

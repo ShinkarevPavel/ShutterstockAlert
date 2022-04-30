@@ -39,7 +39,6 @@ public class ApplicationScheduler {
         if (this.scheduledFuture != null) {
             this.scheduledFuture.cancel(true);
         }
-
         this.scheduledFuture = this.taskScheduler.schedule(taskRunner, new CronTrigger(cronExpressionStr));
     }
 

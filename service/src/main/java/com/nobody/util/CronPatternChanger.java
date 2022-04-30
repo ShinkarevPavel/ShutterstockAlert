@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 public class CronPatternChanger {
     private static final Logger logger = LogManager.getLogger();
     private final String HOUR_PATTERN = "0 0 * * * *";
-    private final String TWO_HOURS_PATTERN = "0 */2 * * * *";
+    private final String TWO_HOURS_PATTERN = "0 0 */2 * * *";
     private final String SECOND_15_PATTERN = "*/15 * * * * *";
-    private final String DEFAULT_PATTERN = "0,30 * * * * *";
+    private final String DEFAULT_PATTERN = "0 */30 * * * *";
     private final String HOUR = "hour";
     private final String TWO_HOUR = "2hour";
     private final String SECONDS = "seconds";

@@ -10,6 +10,7 @@
     <modules>
         <module>web</module>
         <module>service</module>
+        <module>repository</module>
     </modules>
 
     <properties>
