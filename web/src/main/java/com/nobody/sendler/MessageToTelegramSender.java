@@ -1,5 +1,6 @@
 package com.nobody.sendler;
 
+import com.nobody.annotation.InjectTelegramCredentials;
 import com.nobody.dto.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -16,8 +17,11 @@ import java.time.Duration;
 @Component
 public class MessageToTelegramSender {
     private static final Logger logger = LogManager.getLogger();
-    private String TOKEN = "";
-    private String CHAT_ID = "";
+
+    @InjectTelegramCredentials
+    private String TOKEN;
+    @InjectTelegramCredentials
+    private String CHAT_ID;
 
     public void sendMessage(BaseDto dto) {
         if (!checkTelegramBotCredentials()) {
@@ -25,11 +29,13 @@ public class MessageToTelegramSender {
         }
         String text;
         if (dto instanceof ErrorDto) {
-            text = "❗️";
+            text = "❗️\n";
+            text += ((ErrorDto) dto).getMessage(); //TODO
         } else {
-            text = "✅";
+            text = "✅ Shutterstock Bot(v.1.3)\n";
+            text += buildMessage(dto);
         }
-        text += dto.toString();
+
         HttpClient httpClient = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(5))
                 .version(HttpClient.Version.HTTP_2)
@@ -48,15 +54,43 @@ public class MessageToTelegramSender {
         try {
             HttpResponse<String> response = httpClient
                     .send(request, HttpResponse.BodyHandlers.ofString());
-            logger.log(Level.INFO, response.statusCode());
+            logger.log(Level.INFO, "Message was sent. Status " + response.statusCode());
         } catch (IOException | InterruptedException e) {
             logger.log(Level.ERROR, "Error from MessageToTelegramSender " + e.getMessage());
         }
     }
 
-    public void setCredentials(TelegramBotCredentials credentials) {
+    public void setCredentials(TelegramBotCredentialsDto credentials) {
         this.TOKEN = credentials.getToken();
         this.CHAT_ID = credentials.getChatId();
+    }
+
+    public void removeCredentials() {
+        this.TOKEN = null;
+        this.CHAT_ID = null;
+    }
+
+    private String buildMessage(BaseDto dto) {
+        CurrentDayEarningsDto dayEarningsDto = (CurrentDayEarningsDto) dto;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Date: ")
+                .append(dayEarningsDto.getDate())
+                .append("\n")
+                .append("Downloads: ")
+                .append(dayEarningsDto.getDownloads())
+                .append("\n")
+                .append("Earnings: ")
+                .append(dayEarningsDto.getEarnings())
+                .append("\n")
+                .append("\n");
+        dayEarningsDto.getCategories().forEach(c -> stringBuilder.append(CategoryEarningsType.getKeyForBotApi(c.getName()))
+                .append(": ")
+                .append(c.getDownloads())
+                .append("--")
+                .append(c.getEarnings())
+                .append("$")
+                .append("\n"));
+        return stringBuilder.toString();
     }
 
     private boolean checkTelegramBotCredentials() {
