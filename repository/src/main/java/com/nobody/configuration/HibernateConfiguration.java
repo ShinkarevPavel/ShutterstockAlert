@@ -13,6 +13,9 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import javax.xml.crypto.Data;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 @Configuration
@@ -20,14 +23,14 @@ import java.util.Properties;
 @ComponentScan("com.nobody")
 public class HibernateConfiguration {
 
-    @Value("${hibernate.connection.username}")
-    private String username;
-    @Value("${hibernate.connection.password}")
-    private String password;
-    @Value("${hibernate.connection.driver_class}")
-    private String db_driver;
-    @Value("${hibernate.connection.url}")
-    private String url;
+//    @Value("${hibernate.connection.username}")
+//    private String username;
+//    @Value("${hibernate.connection.password}")
+//    private String password;
+//    @Value("${hibernate.connection.driver_class}")
+//    private String db_driver;
+//    @Value("${hibernate.connection.url}")
+//    private String url;
 
     @Bean
     public SessionFactory sessionFactory() {
@@ -44,12 +47,21 @@ public class HibernateConfiguration {
     }
 
     @Bean
-    public DataSource dataSource() {
+    public DataSource dataSource() throws URISyntaxException {
+//        URI dbUri = new URI("postgres://prfaglnvxrezui:9995f601a4287a1c985de90a7fdaba95624a5270dd1d45554476f4b9f1ee31b3@ec2-52-3-2-245.compute-1.amazonaws.com:5432/db3ddcsf3dfh7c");
+        URI dbUri = new URI("DATASOURCE_URL");
+
+        String host =dbUri.getHost();
+        int port =dbUri.getPort();
+        String dbName = "db3ddcsf3dfh7c";
+        String username = dbUri.getUserInfo().split(":")[0];
+        String password = dbUri.getUserInfo().split(":")[1];
+        String dbUrl = "jdbc:postgresql://" +  host + ":" + port + "/" + dbName + "?sslmode=require&user=" + username + "&password=" + password;
+
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setUsername(username);
         dataSource.setPassword(password);
-        dataSource.setDriverClassName(db_driver);
-        dataSource.setJdbcUrl(url);
+        dataSource.setJdbcUrl(dbUrl);
         return dataSource;
     }
 
