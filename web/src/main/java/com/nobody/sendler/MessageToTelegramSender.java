@@ -29,8 +29,8 @@ public class MessageToTelegramSender {
         }
         String text;
         if (dto instanceof ErrorDto) {
-            text = "❗️\n";
-            text += ((ErrorDto) dto).getMessage(); //TODO
+            text = "❗ Shutterstock Bot(v.1.3)\n";
+            text += ((ErrorDto) dto).getMessage() + "\n" + ((ErrorDto) dto).getExceptionMessage(); //TODO
         } else {
             text = "✅ Shutterstock Bot(v.1.3)\n";
             text += buildMessage(dto);

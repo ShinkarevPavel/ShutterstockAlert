@@ -65,9 +65,6 @@ public class InjectTelegramCredentialsPostProcessor implements BeanPostProcessor
         } else {
             telegramCredentials = activeTelegramCredentials.get();
         }
-//        this.telegramCredentials = telegramCredentials
-//                .orElseThrow(() -> new ShutterServiceException("There is no active telegram credentials"));
-
-
+        //TODO default values for token and chatId
     }
 }
