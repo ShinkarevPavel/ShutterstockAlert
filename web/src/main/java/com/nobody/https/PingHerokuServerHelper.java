@@ -21,7 +21,6 @@ public class PingHerokuServerHelper {
 
     private static final Logger logger = LogManager.getLogger();
     private final String URL = "https://shutter-application.herokuapp.com/api/v1/ping";
-//    private final String URL = "http://localhost:8080/api/v1/ping";
 
     @Scheduled(cron = "0 */29 * * * *")
     public void sendRequest() {
