@@ -5,6 +5,8 @@ import com.nobody.entity.TelegramCredentials;
 import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,10 +18,12 @@ import javax.sql.DataSource;
 import javax.xml.crypto.Data;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 @Configuration
-@PropertySource("classpath:hibernate.properties")
+//@PropertySource("classpath:hibernate.properties")
 @ComponentScan("com.nobody")
 public class HibernateConfiguration {
 
@@ -32,6 +36,11 @@ public class HibernateConfiguration {
                 .buildSessionFactory();
     }
 
+//    @Bean
+//    public org.hibernate.cfg.Configuration configuration() {
+//        return new org.hibernate.cfg.Configuration();
+//    }
+
     @Bean
     public Session session() {
         return sessionFactory().openSession();
@@ -41,8 +50,9 @@ public class HibernateConfiguration {
     public DataSource dataSource() throws URISyntaxException {
         final String dbName = "db3ddcsf3dfh7c";
         final String urlPrefix = "jdbc:postgresql://";
-        URI dbUri = new URI(System.getenv("DATABASE_URL"));
-//        URI dbUri = new URI("postgres://prfaglnvxrezui:9995f601a4287a1c985de90a7fdaba95624a5270dd1d45554476f4b9f1ee31b3@ec2-52-3-2-245.compute-1.amazonaws.com:5432/db3ddcsf3dfh7c");
+//        URI dbUri = new URI(System.getenv("DATABASE_URL"));
+
+        URI dbUri = new URI("postgres://prfaglnvxrezui:9995f601a4287a1c985de90a7fdaba95624a5270dd1d45554476f4b9f1ee31b3@ec2-52-3-2-245.compute-1.amazonaws.com:5432/db3ddcsf3dfh7c");
         String host =dbUri.getHost();
         int port =dbUri.getPort();
         String username = dbUri.getUserInfo().split(":")[0];
@@ -53,9 +63,18 @@ public class HibernateConfiguration {
         dataSource.setUsername(username);
         dataSource.setPassword(password);
         dataSource.setJdbcUrl(dbUrl);
-        System.out.println("***************************   data source configured");
         return dataSource;
     }
+
+//    @Bean
+//    public StandardServiceRegistry hibernateUrlConfigure() {
+//        Map<String,String> jdbcUrlSettings = new HashMap<>();
+//        jdbcUrlSettings.put("hibernate.connection.url", "postgres://prfaglnvxrezui:9995f601a4287a1c985de90a7fdaba95624a5270dd1d45554476f4b9f1ee31b3@ec2-52-3-2-245.compute-1.amazonaws.com:5432/db3ddcsf3dfh7c");
+//        return new StandardServiceRegistryBuilder().
+//                configure().
+//                applySettings(jdbcUrlSettings).
+//                build();
+//    }
 
     private Properties hibernateProperties() {
         Properties properties = new Properties();
