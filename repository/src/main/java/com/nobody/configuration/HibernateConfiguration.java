@@ -23,34 +23,17 @@ import java.util.Map;
 import java.util.Properties;
 
 @Configuration
-//@PropertySource("classpath:hibernate.properties")
 @ComponentScan("com.nobody")
 public class HibernateConfiguration {
 
     @Bean
     public SessionFactory sessionFactory() throws URISyntaxException {
-//        return configuration()
-//                .setProperties(hibernateProperties())
-//                .addAnnotatedClass(Header.class)
-//                .addAnnotatedClass(TelegramCredentials.class)
-//                .buildSessionFactory();
-
-        org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
-        configuration.setProperty("hibernate.connection.url", getUrl());
-
-        StandardServiceRegistryBuilder standardServiceRegistryBuilder = new StandardServiceRegistryBuilder().
-                applySettings(configuration.getProperties());
-        return configuration
+        return new org.hibernate.cfg.Configuration()
+                .setProperties(hibernateProperties())
                 .addAnnotatedClass(Header.class)
                 .addAnnotatedClass(TelegramCredentials.class)
-                .buildSessionFactory(standardServiceRegistryBuilder.build());
-
+                .buildSessionFactory();
     }
-
-//    @Bean
-//    public org.hibernate.cfg.Configuration configuration() {
-//        return new org.hibernate.cfg.Configuration();
-//    }
 
     @Bean
     public Session session() throws URISyntaxException {
@@ -67,11 +50,12 @@ public class HibernateConfiguration {
     }
 
 
-    private Properties hibernateProperties() {
+    private Properties hibernateProperties() throws URISyntaxException {
         Properties properties = new Properties();
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("hibernate.format_sql", "true");
+        properties.setProperty("hibernate.connection.url", getUrl());
         return properties;
     }
 

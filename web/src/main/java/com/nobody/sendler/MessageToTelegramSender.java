@@ -2,6 +2,7 @@ package com.nobody.sendler;
 
 import com.nobody.annotation.InjectTelegramCredentials;
 import com.nobody.dto.*;
+import com.nobody.sendler.util.PrepareMessageForTelegramFromDto;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +34,7 @@ public class MessageToTelegramSender {
             text += ((ErrorDto) dto).getMessage() + "\n" + ((ErrorDto) dto).getExceptionMessage(); //TODO
         } else {
             text = "✅ Shutterstock Bot(v.1.3)\n";
-            text += buildMessage(dto);
+            text += PrepareMessageForTelegramFromDto.buildMessage(dto);
         }
 
         HttpClient httpClient = HttpClient.newBuilder()
@@ -68,29 +69,6 @@ public class MessageToTelegramSender {
     public void removeCredentials() {
         this.TOKEN = null;
         this.CHAT_ID = null;
-    }
-
-    private String buildMessage(BaseDto dto) {
-        CurrentDayEarningsDto dayEarningsDto = (CurrentDayEarningsDto) dto;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Date: ")
-                .append(dayEarningsDto.getDate())
-                .append("\n")
-                .append("Downloads: ")
-                .append(dayEarningsDto.getDownloads())
-                .append("\n")
-                .append("Earnings: ")
-                .append(dayEarningsDto.getEarnings())
-                .append("\n")
-                .append("\n");
-        dayEarningsDto.getCategories().forEach(c -> stringBuilder.append(CategoryEarningsType.getKeyForBotApi(c.getName()))
-                .append(": ")
-                .append(c.getDownloads())
-                .append("--")
-                .append(c.getEarnings())
-                .append("$")
-                .append("\n"));
-        return stringBuilder.toString();
     }
 
     private boolean checkTelegramBotCredentials() {
