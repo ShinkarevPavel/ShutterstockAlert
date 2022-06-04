@@ -8,6 +8,7 @@ import com.nobody.exception.ShutterStockParseException;
 import com.nobody.util.DateTimeBuilder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,11 @@ public class CurrentDayBuilder {
         String currentDate = DateTimeBuilder.getCurrentDateYYYY_MM_ddFormat();
         return days.stream().filter(d -> d.getDate().equals(currentDate))
                 .findFirst()
-                .orElseThrow(() -> new ShutterStockParseException("Error of daily earnings getting. Can be mistake with current date."));
+                .orElse(DailyEarningsDto.builder()
+                        .date(currentDate)
+                        .earnings("still empty :)")
+                        .downloads("still empty :)")
+                        .categories(new ArrayList<>()) // NPE workaround
+                        .build());
     }
 }
