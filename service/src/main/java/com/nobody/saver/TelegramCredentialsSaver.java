@@ -13,10 +13,12 @@ public class TelegramCredentialsSaver {
     @Getter
     @Setter
     private String botName;
+
     @Getter
     @Setter
     @InjectTelegramCredentials
     private String token;
+
     @Getter
     @Setter
     @InjectTelegramCredentials

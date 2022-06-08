@@ -18,8 +18,9 @@ import java.util.Optional;
 @Component
 public class InjectTelegramCredentialsPostProcessor implements BeanPostProcessor {
     private static final Logger logger = LogManager.getLogger();
-    private TelegramDaoImpl telegramDao;
+
     private TelegramCredentials telegramCredentials;
+    private TelegramDaoImpl telegramDao;
     private TelegramCredentialsSaver telegramCredentialsSaver;
 
     @Autowired
@@ -33,13 +34,16 @@ public class InjectTelegramCredentialsPostProcessor implements BeanPostProcessor
         Field[] declaredFields = bean.getClass().getDeclaredFields();
         for (Field field : declaredFields) {
             if (field.isAnnotationPresent(InjectTelegramCredentials.class)) {
+                System.out.println("******************************************************************");
                 if (field.getName().equals("token")) {
+                    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     setCredentials();
                     field.setAccessible(true);
                     ReflectionUtils.setField(field, bean, telegramCredentials.getToken());
                 }
 
                 if (field.getName().equals("chatId")) {
+                    System.out.println("777777777777777777777777777777777777777777777777");
                     setCredentials();
                     field.setAccessible(true);
                     ReflectionUtils.setField(field, bean, telegramCredentials.getChatId());
