@@ -1,11 +1,15 @@
 package com.nobody.sendler;
 
-import com.nobody.annotation.InjectTelegramCredentials;
-import com.nobody.dto.*;
+import com.nobody.dto.BaseDto;
+import com.nobody.dto.CurrentDayEarningsDto;
+import com.nobody.dto.ErrorDto;
+import com.nobody.dto.shutterapi.DailyEarningsDto;
+import com.nobody.saver.TelegramCredentialsSaver;
 import com.nobody.sendler.util.PrepareMessageForTelegramFromDto;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.core.UriBuilder;
@@ -18,25 +22,15 @@ import java.time.Duration;
 @Component
 public class MessageToTelegramSender {
     private static final Logger logger = LogManager.getLogger();
+    private TelegramCredentialsSaver telegramCredentialsSaver;
 
-    @InjectTelegramCredentials
-    private String TOKEN;
-    @InjectTelegramCredentials
-    private String CHAT_ID;
+    @Autowired
+    public MessageToTelegramSender(TelegramCredentialsSaver telegramCredentialsSaver) {
+        this.telegramCredentialsSaver = telegramCredentialsSaver;
+    }
 
     public void sendMessage(BaseDto dto) {
-        if (!checkTelegramBotCredentials()) {
-            logger.log(Level.ERROR, "Error from MessageToTelegramSender. Message can't be send. Token or chat id is not set.");
-        }
-        String text;
-        if (dto instanceof ErrorDto) {
-            text = "❗ Shutterstock Bot(v.1.3)\n";
-            text += ((ErrorDto) dto).getMessage() + "\n" + ((ErrorDto) dto).getExceptionMessage(); //TODO
-        } else {
-            text = "✅ Shutterstock Bot(v.1.3)\n";
-            text += PrepareMessageForTelegramFromDto.buildMessage(dto);
-        }
-
+        String text = buildTextMessage(dto);
         HttpClient httpClient = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(5))
                 .version(HttpClient.Version.HTTP_2)
@@ -44,12 +38,12 @@ public class MessageToTelegramSender {
         UriBuilder builder = UriBuilder
                 .fromUri("https://api.telegram.org")
                 .path("/{token}/sendMessage")
-                .queryParam("chat_id", this.CHAT_ID)
+                .queryParam("chat_id", telegramCredentialsSaver.getChatId())
                 .queryParam("text", text);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(builder.build("bot" + this.TOKEN))
+                .uri(builder.build("bot" + telegramCredentialsSaver.getToken()))
                 .timeout(Duration.ofSeconds(5))
                 .build();
         try {
@@ -61,17 +55,8 @@ public class MessageToTelegramSender {
         }
     }
 
-    public void setCredentials(TelegramBotCredentialsDto credentials) {
-        this.TOKEN = credentials.getToken();
-        this.CHAT_ID = credentials.getChatId();
-    }
 
-    public void removeCredentials() {
-        this.TOKEN = null;
-        this.CHAT_ID = null;
-    }
-
-    private boolean checkTelegramBotCredentials() {
-        return this.TOKEN != null && this.CHAT_ID != null && this.TOKEN.length() != 0 && this.CHAT_ID.length() != 0;
+    private String buildTextMessage(BaseDto dto) {
+        return PrepareMessageForTelegramFromDto.buildMessage(dto);
     }
 }

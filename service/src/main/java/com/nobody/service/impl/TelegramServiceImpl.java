@@ -5,6 +5,7 @@ import com.nobody.dto.TelegramBotCredentialsDto;
 import com.nobody.entity.TelegramCredentials;
 import com.nobody.exception.ShutterServiceException;
 import com.nobody.mapper.TelegramCredentialsMapper;
+import com.nobody.saver.TelegramCredentialsSaver;
 import com.nobody.service.BaseEntityService;
 import com.nobody.util.KeyValidator;
 import org.apache.logging.log4j.Level;
@@ -23,11 +24,12 @@ public class TelegramServiceImpl implements BaseEntityService<TelegramBotCredent
 
     private static final Logger logger = LogManager.getLogger();
     private TelegramDaoImpl telegramDao;
-
+    private TelegramCredentialsSaver telegramCredentialsSaver;
 
     @Autowired
-    public TelegramServiceImpl(TelegramDaoImpl telegramDao) {
+    public TelegramServiceImpl(TelegramDaoImpl telegramDao, TelegramCredentialsSaver telegramCredentialsSaver) {
         this.telegramDao = telegramDao;
+        this.telegramCredentialsSaver = telegramCredentialsSaver;
     }
 
     @Override
@@ -41,16 +43,21 @@ public class TelegramServiceImpl implements BaseEntityService<TelegramBotCredent
                 });
 
         // made previous credentials not active
-        checkActiveCredentials();
+        checkAndTurnOffActiveCredentials();
         telegramDao.addEntity(TelegramCredentialsMapper.dtoToEntity(telegramBotCredentialsDto));
+        // setting credentials in saver
+        setCredentials(telegramBotCredentialsDto);
     }
 
     @Override
     @Transactional
     public void removeEntity(TelegramBotCredentialsDto telegramBotCredentialsDto) {
         checkAccessKey(telegramBotCredentialsDto.getAccessKey());
+
         TelegramCredentials telegramCredentials = getIfExists(telegramBotCredentialsDto.getToken());
         telegramDao.removeEntity(telegramCredentials.getId());
+        //remove credentials from telegram saver
+        removeCredentials();
     }
 
     @Override
@@ -61,6 +68,8 @@ public class TelegramServiceImpl implements BaseEntityService<TelegramBotCredent
         telegramCredentials.setToken(telegramBotCredentialsDto.getToken());
         telegramCredentials.setChatId(telegramBotCredentialsDto.getChatId() != null ?
                 telegramBotCredentialsDto.getChatId() : telegramCredentials.getChatId());
+
+        setCredentials(TelegramCredentialsMapper.entityToDto((telegramCredentials))); // update telegram credentials in saver
         return TelegramCredentialsMapper.entityToDto(telegramDao.updateEntity(telegramCredentials));
     }
 
@@ -83,7 +92,7 @@ public class TelegramServiceImpl implements BaseEntityService<TelegramBotCredent
     @Transactional
     public void changeAvailability(TelegramBotCredentialsDto telegramBotCredentialsDto) {
         checkAccessKey(telegramBotCredentialsDto.getAccessKey());
-        checkActiveCredentials();
+        checkAndTurnOffActiveCredentials();
         telegramDao.getEntity(telegramBotCredentialsDto.getToken())
                 .orElseThrow(() -> new ShutterServiceException("There is no credentials " + telegramBotCredentialsDto.getToken()))
                 .setIsActive(true);
@@ -94,7 +103,7 @@ public class TelegramServiceImpl implements BaseEntityService<TelegramBotCredent
                 .orElseThrow(() -> new ShutterServiceException("There is no entity with " + parameter));
     }
 
-    private void checkActiveCredentials() {
+    private void checkAndTurnOffActiveCredentials() {
         Optional<TelegramCredentials> active = telegramDao.getActive();
         if (active.isEmpty()) {
             logger.log(Level.ERROR, "There is no active credentials");
@@ -107,5 +116,16 @@ public class TelegramServiceImpl implements BaseEntityService<TelegramBotCredent
         if (!KeyValidator.isKeyValid(key)) {
             throw new ShutterServiceException("Security key error");
         }
+    }
+
+    // TODO test this method
+    private void setCredentials(TelegramBotCredentialsDto credentials) {
+        telegramCredentialsSaver.setToken(credentials.getToken());
+        telegramCredentialsSaver.setChatId(credentials.getChatId());
+    }
+    // TODO test this method
+    private void removeCredentials() {
+        telegramCredentialsSaver.setToken(null);
+        telegramCredentialsSaver.setChatId(null);
     }
 }

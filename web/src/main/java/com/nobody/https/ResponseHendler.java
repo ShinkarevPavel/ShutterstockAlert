@@ -1,7 +1,7 @@
 package com.nobody.https;
 
 import com.nobody.exception.ShutterStockResponseException;
-import com.nobody.header.ShutterHeaderSaver;
+import com.nobody.saver.ShutterHeaderSaver;
 import com.nobody.util.DateTimeBuilder;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

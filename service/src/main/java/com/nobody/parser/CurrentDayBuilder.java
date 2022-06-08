@@ -2,9 +2,9 @@ package com.nobody.parser;
 
 import com.nobody.dto.CategoryDto;
 import com.nobody.dto.CurrentDayEarningsDto;
+import com.nobody.dto.MonthSummaryEarningsDto;
 import com.nobody.dto.shutterapi.DailyEarningsDto;
 import com.nobody.dto.shutterapi.MonthlyEarningsDto;
-import com.nobody.exception.ShutterStockParseException;
 import com.nobody.util.DateTimeBuilder;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +32,12 @@ public class CurrentDayBuilder {
                 .build();
     }
 
+    public MonthSummaryEarningsDto getMonthEarnings(MonthlyEarningsDto monthlyEarningsDto) {
+        return MonthSummaryEarningsDto.builder()
+                .earnings(monthlyEarningsDto.getEarnings())
+                .downloads(monthlyEarningsDto.getDownloads())
+                .build();
+    }
 
     private DailyEarningsDto getCurrent(List<DailyEarningsDto> days) {
         String currentDate = DateTimeBuilder.getCurrentDateYYYY_MM_ddFormat();

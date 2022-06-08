@@ -58,13 +58,9 @@ public class InjectTelegramCredentialsPostProcessor implements BeanPostProcessor
 
         if (activeTelegramCredentials.isEmpty()) {
             logger.log(Level.ERROR, "Error from MessageToTelegramSender. Message can't be send. Token or chat will set with default values.");
-            this.telegramCredentials = TelegramCredentials.builder()
-                    .token("default")
-                    .chatId("default")
-                    .build();
+            this.telegramCredentials = TelegramCredentials.builder().build();
         } else {
             telegramCredentials = activeTelegramCredentials.get();
         }
-        //TODO default values for token and chatId
     }
 }

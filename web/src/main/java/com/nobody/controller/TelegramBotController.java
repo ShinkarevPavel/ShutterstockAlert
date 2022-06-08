@@ -37,7 +37,6 @@ public class TelegramBotController {
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@Validated(TelegramBotCredentialsDto.Create.class) @RequestBody TelegramBotCredentialsDto botCredentials) {
         telegramService.addEntity(botCredentials);
-        toTelegramSender.setCredentials(botCredentials);
         logger.log(Level.INFO, "Telegram credentials were set");
     }
 
@@ -45,16 +44,13 @@ public class TelegramBotController {
     @ResponseStatus(HttpStatus.OK)
     public void remove(@RequestBody TelegramBotCredentialsDto telegramBotCredentialsDto) {
         telegramService.removeEntity(telegramBotCredentialsDto);
-        toTelegramSender.removeCredentials();
         logger.log(Level.INFO, "Telegram credentials were removed");
     }
 
     @PatchMapping
     @ResponseStatus(HttpStatus.OK)
     public TelegramBotCredentialsDto update(@Validated(TelegramBotCredentialsDto.Update.class) @RequestBody TelegramBotCredentialsDto telegramBotCredentialsDto) {
-        TelegramBotCredentialsDto returnDto = telegramService.updateEntity(telegramBotCredentialsDto);
-        toTelegramSender.setCredentials(telegramBotCredentialsDto);
-        return returnDto;
+        return telegramService.updateEntity(telegramBotCredentialsDto);
 
     }
 

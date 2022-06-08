@@ -2,6 +2,7 @@ package com.nobody.sendler.api;
 
 import com.nobody.runner.ApplicationScheduler;
 import com.nobody.runner.TaskRunner;
+import com.nobody.saver.TelegramCredentialsSaver;
 import com.nobody.util.CronPatternChanger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,12 +22,24 @@ public class Bot extends TelegramLongPollingBot {
     private TaskRunner taskRunner;
     private CronPatternChanger cronPatternChanger;
     private ApplicationScheduler applicationScheduler;
+    private TelegramCredentialsSaver telegramCredentialsSaver;
 
     @Autowired
-    public Bot(TaskRunner taskRunner, CronPatternChanger cronPatternChanger, ApplicationScheduler applicationScheduler) {
+    public Bot(TaskRunner taskRunner, CronPatternChanger cronPatternChanger, ApplicationScheduler applicationScheduler, TelegramCredentialsSaver telegramCredentialsSaver) {
         this.taskRunner = taskRunner;
         this.cronPatternChanger = cronPatternChanger;
         this.applicationScheduler = applicationScheduler;
+        this.telegramCredentialsSaver = telegramCredentialsSaver;
+    }
+
+    @Override
+    public String getBotUsername() {
+        return "@nobodysShutterBot"; //TODO
+    }
+
+    @Override
+    public String getBotToken() {
+        return telegramCredentialsSaver.getToken();
     }
 
     @Override
@@ -57,7 +70,7 @@ public class Bot extends TelegramLongPollingBot {
                     sendDailyEarnings();
                     break;
                 case ("month_tapped"):
-                //TODO write here something someday
+                    sendMonthEarnings();
                     break;
                 default:
                     changeSchedule(messageKey);//TODO check pattern
@@ -82,21 +95,16 @@ public class Bot extends TelegramLongPollingBot {
         taskRunner.run();
     }
 
-    @Override
-    public String getBotUsername() {
-        return "@nobodysShutterBot"; //TODO
+    private void sendMonthEarnings() {
+        taskRunner.runMonth();
     }
 
-    @Override
-    public String getBotToken() {
-        return "5390249782:AAHec3LDGlQ5EzHCxXrlZ25DR1fXTKe2fco"; //TODO
-    }
 
     private SendMessage sendScheduleBoard(long chatId) {
-        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-
         InlineKeyboardButton secondsInterval = new InlineKeyboardButton();
         InlineKeyboardButton minutesInterval = new InlineKeyboardButton();
+        InlineKeyboardButton hourInterval = new InlineKeyboardButton();
+        InlineKeyboardButton twoHourInterval = new InlineKeyboardButton();
 
         secondsInterval.setText("15sec");
         secondsInterval.setCallbackData("seconds");
@@ -104,28 +112,25 @@ public class Bot extends TelegramLongPollingBot {
         minutesInterval.setText("30min");
         minutesInterval.setCallbackData("minutesInterval");
 
-        List<InlineKeyboardButton> firstButtons = new ArrayList<>();
-        firstButtons.add(secondsInterval);
-        firstButtons.add(minutesInterval);
-        // ***   ***  ***   ***  ***   ***  //
-        InlineKeyboardButton hourInterval = new InlineKeyboardButton();
-        InlineKeyboardButton twoHourInterval = new InlineKeyboardButton();
-
         hourInterval.setText("hour");
         hourInterval.setCallbackData("hour");
 
         twoHourInterval.setText("2hours");
         twoHourInterval.setCallbackData("2hour");
 
-        List<InlineKeyboardButton> secondButtons = new ArrayList<>();
-        secondButtons.add(hourInterval);
-        secondButtons.add(twoHourInterval);
+        // ***   ***  ***   ***  ***   ***  //
+        List<InlineKeyboardButton> buttons = new ArrayList<>();
+        buttons.add(secondsInterval);
+        buttons.add(minutesInterval);
+        buttons.add(hourInterval);
+        buttons.add(twoHourInterval);
 
         // ***   ***  ***   ***  ***   ***  //
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(firstButtons);
-        rowList.add(secondButtons);
-
+        rowList.add(buttons);
+        
+        // ***   ***  ***   ***  ***   ***  //
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         markup.setKeyboard(rowList);
         return SendMessage.builder()
                 .chatId(String.valueOf(chatId))
@@ -135,9 +140,6 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private SendMessage sendMainBoard(long chatId) {
-        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-
-
         InlineKeyboardButton scheduleButton = new InlineKeyboardButton();
         InlineKeyboardButton monthEarningsButton = new InlineKeyboardButton();
         InlineKeyboardButton dailyEarnings = new InlineKeyboardButton();
@@ -156,12 +158,11 @@ public class Bot extends TelegramLongPollingBot {
         buttons.add(monthEarningsButton);
         buttons.add(dailyEarnings);
 
-
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(buttons);
 
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         markup.setKeyboard(rowList);
-
         return SendMessage.builder()
                 .chatId(String.valueOf(chatId))
                 .text("Actions")

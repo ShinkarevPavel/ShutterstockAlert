@@ -30,4 +30,10 @@ public class TaskRunner implements Runnable {
         MonthlyEarningsDto monthlyEarningsDto = commonDtoBuilder.buildDto(response);
         sender.sendMessage(currentDayBuilder.buildCurrentDayEarningsDto(monthlyEarningsDto));
     }
+
+    public void runMonth() {
+        String response = responseHendler.sendRequest();
+        MonthlyEarningsDto monthlyEarningsDto = commonDtoBuilder.buildDto(response);
+        sender.sendMessage(currentDayBuilder.getMonthEarnings(monthlyEarningsDto));
+    }
 }

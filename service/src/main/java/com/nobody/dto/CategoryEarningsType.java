@@ -7,17 +7,17 @@ public enum CategoryEarningsType {
     _ENHANCED("Enhanced"),
     _SINGLE_IMAGE_AND_OTHER("Singles");
 
-    private final String BotApi;
+    private final String BOT_API;
 
     CategoryEarningsType(String botApi) {
-        BotApi = botApi;
+        BOT_API = botApi;
     }
 
     public static String getKeyForBotApi(String shutterApiKey) {
-        return CategoryEarningsType.valueOf(CategoryEarningsType.class, "_" + shutterApiKey.toUpperCase()).getBotApi();
+        return CategoryEarningsType.valueOf(CategoryEarningsType.class, "_" + shutterApiKey.toUpperCase()).getBOT_API();
     }
 
-    private String getBotApi() {
-        return BotApi;
+    private String getBOT_API() {
+        return BOT_API;
     }
 }
