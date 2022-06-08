@@ -128,7 +128,7 @@ public class Bot extends TelegramLongPollingBot {
         // ***   ***  ***   ***  ***   ***  //
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(buttons);
-        
+
         // ***   ***  ***   ***  ***   ***  //
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         markup.setKeyboard(rowList);

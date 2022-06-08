@@ -3,6 +3,7 @@ package com.nobody.annotation;
 import com.nobody.dao.impl.TelegramDaoImpl;
 import com.nobody.entity.TelegramCredentials;
 import com.nobody.exception.ShutterServiceException;
+import com.nobody.saver.TelegramCredentialsSaver;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +21,7 @@ public class InjectTelegramCredentialsPostProcessor implements BeanPostProcessor
     private static final Logger logger = LogManager.getLogger();
     private TelegramDaoImpl telegramDao;
     private TelegramCredentials telegramCredentials;
+    private TelegramCredentialsSaver telegramCredentialsSaver;
 
     @Autowired
     public InjectTelegramCredentialsPostProcessor(TelegramDaoImpl telegramDao) {
@@ -55,12 +57,13 @@ public class InjectTelegramCredentialsPostProcessor implements BeanPostProcessor
 
     private void getCredentials() {
         Optional<TelegramCredentials> activeTelegramCredentials = telegramDao.getActive();
-
         if (activeTelegramCredentials.isEmpty()) {
             logger.log(Level.ERROR, "Error from MessageToTelegramSender. Message can't be send. Token or chat will set with default values.");
             this.telegramCredentials = TelegramCredentials.builder().build();
         } else {
             telegramCredentials = activeTelegramCredentials.get();
+            telegramCredentials.setToken(telegramCredentials.getToken());
+            telegramCredentials.setToken(telegramCredentials.getChatId());
         }
     }
 }
