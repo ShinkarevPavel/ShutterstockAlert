@@ -2,7 +2,6 @@ package com.nobody.annotation;
 
 import com.nobody.dao.impl.TelegramDaoImpl;
 import com.nobody.entity.TelegramCredentials;
-import com.nobody.exception.ShutterServiceException;
 import com.nobody.saver.TelegramCredentialsSaver;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -34,13 +33,13 @@ public class InjectTelegramCredentialsPostProcessor implements BeanPostProcessor
         Field[] declaredFields = bean.getClass().getDeclaredFields();
         for (Field field : declaredFields) {
             if (field.isAnnotationPresent(InjectTelegramCredentials.class)) {
-                if (field.getName().equals("TOKEN")) {
+                if (field.getName().equals("token")) {
                     setCredentials();
                     field.setAccessible(true);
                     ReflectionUtils.setField(field, bean, telegramCredentials.getToken());
                 }
 
-                if (field.getName().equals("CHAT_ID")) {
+                if (field.getName().equals("chatId")) {
                     setCredentials();
                     field.setAccessible(true);
                     ReflectionUtils.setField(field, bean, telegramCredentials.getChatId());
@@ -63,8 +62,8 @@ public class InjectTelegramCredentialsPostProcessor implements BeanPostProcessor
             this.telegramCredentials = TelegramCredentials.builder().build();
         } else {
             telegramCredentials = activeTelegramCredentials.get();
-            telegramCredentials.setToken(telegramCredentials.getToken());
-            telegramCredentials.setToken(telegramCredentials.getChatId());
+            telegramCredentialsSaver.setToken(telegramCredentials.getToken());
+            telegramCredentialsSaver.setToken(telegramCredentials.getChatId());
         }
     }
 }
