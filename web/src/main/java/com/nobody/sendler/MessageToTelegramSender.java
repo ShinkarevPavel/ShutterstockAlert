@@ -1,9 +1,6 @@
 package com.nobody.sendler;
 
 import com.nobody.dto.BaseDto;
-import com.nobody.dto.CurrentDayEarningsDto;
-import com.nobody.dto.ErrorDto;
-import com.nobody.dto.shutterapi.DailyEarningsDto;
 import com.nobody.saver.TelegramCredentialsSaver;
 import com.nobody.sendler.util.PrepareMessageForTelegramFromDto;
 import org.apache.logging.log4j.Level;

@@ -21,12 +21,11 @@ public class InjectTelegramCredentialsPostProcessor implements BeanPostProcessor
 
     private TelegramCredentials telegramCredentials;
     private TelegramDaoImpl telegramDao;
-    private TelegramCredentialsSaver telegramCredentialsSaver;
 
     @Autowired
-    public InjectTelegramCredentialsPostProcessor(TelegramDaoImpl telegramDao, TelegramCredentialsSaver telegramCredentialsSaver) {
+    public InjectTelegramCredentialsPostProcessor(TelegramDaoImpl telegramDao) {
         this.telegramDao = telegramDao;
-        this.telegramCredentialsSaver = telegramCredentialsSaver;
+
     }
 
     @Override
@@ -34,16 +33,13 @@ public class InjectTelegramCredentialsPostProcessor implements BeanPostProcessor
         Field[] declaredFields = bean.getClass().getDeclaredFields();
         for (Field field : declaredFields) {
             if (field.isAnnotationPresent(InjectTelegramCredentials.class)) {
-                System.out.println("******************************************************************");
                 if (field.getName().equals("token")) {
-                    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     setCredentials();
                     field.setAccessible(true);
                     ReflectionUtils.setField(field, bean, telegramCredentials.getToken());
                 }
 
                 if (field.getName().equals("chatId")) {
-                    System.out.println("777777777777777777777777777777777777777777777777");
                     setCredentials();
                     field.setAccessible(true);
                     ReflectionUtils.setField(field, bean, telegramCredentials.getChatId());
@@ -66,8 +62,6 @@ public class InjectTelegramCredentialsPostProcessor implements BeanPostProcessor
             this.telegramCredentials = TelegramCredentials.builder().build();
         } else {
             telegramCredentials = activeTelegramCredentials.get();
-            telegramCredentialsSaver.setToken(telegramCredentials.getToken());
-            telegramCredentialsSaver.setToken(telegramCredentials.getChatId());
         }
     }
 }
