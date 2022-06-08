@@ -51,6 +51,7 @@ public class PrepareMessageForTelegramFromDto {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Downloads: ")
                 .append(summaryEarningsDto.getDownloads())
+                .append("\n")
                 .append("Earnings: ")
                 .append(summaryEarningsDto.getEarnings());
         return stringBuilder.toString();
