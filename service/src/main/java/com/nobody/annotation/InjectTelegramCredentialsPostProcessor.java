@@ -24,8 +24,9 @@ public class InjectTelegramCredentialsPostProcessor implements BeanPostProcessor
     private TelegramCredentialsSaver telegramCredentialsSaver;
 
     @Autowired
-    public InjectTelegramCredentialsPostProcessor(TelegramDaoImpl telegramDao) {
+    public InjectTelegramCredentialsPostProcessor(TelegramDaoImpl telegramDao, TelegramCredentialsSaver telegramCredentialsSaver) {
         this.telegramDao = telegramDao;
+        this.telegramCredentialsSaver = telegramCredentialsSaver;
     }
 
     @Override
