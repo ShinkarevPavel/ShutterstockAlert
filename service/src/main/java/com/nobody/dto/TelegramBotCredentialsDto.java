@@ -24,4 +24,7 @@ public class TelegramBotCredentialsDto extends BaseDto {
 
     @NotEmpty(message = "chatId is not valid", groups = {Create.class})
     private String chatId;
+
+    @NotEmpty(message = "bot name is not valid", groups = {Create.class})
+    private String botName;
 }

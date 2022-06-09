@@ -2,7 +2,6 @@ package com.nobody.annotation;
 
 import com.nobody.dao.impl.TelegramDaoImpl;
 import com.nobody.entity.TelegramCredentials;
-import com.nobody.saver.TelegramCredentialsSaver;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,6 +42,12 @@ public class InjectTelegramCredentialsPostProcessor implements BeanPostProcessor
                     setCredentials();
                     field.setAccessible(true);
                     ReflectionUtils.setField(field, bean, telegramCredentials.getChatId());
+                }
+
+                if (field.getName().equals("botName")) {
+                    setCredentials();
+                    field.setAccessible(true);
+                    ReflectionUtils.setField(field, bean, telegramCredentials.getBotName());
                 }
             }
         }

@@ -23,4 +23,6 @@ public class TelegramCredentials {
     private String chatId;
     @Column(name = "is_active")
     private Boolean isActive;
+    @Column(name = "bot_name")
+    private String botName;
 }

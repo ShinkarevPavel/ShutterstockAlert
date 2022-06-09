@@ -9,6 +9,7 @@ public class TelegramCredentialsMapper {
                 .token(telegramBotCredentialsDto.getToken())
                 .chatId(telegramBotCredentialsDto.getChatId())
                 .isActive(true)
+                .botName(telegramBotCredentialsDto.getBotName())
                 .build();
     }
 
@@ -17,6 +18,7 @@ public class TelegramCredentialsMapper {
                 .accessKey("hidden")
                 .token(telegramCredentials.getToken())
                 .chatId(telegramCredentials.getChatId())
+                .botName(telegramCredentials.getBotName())
                 .build();
     }
 }

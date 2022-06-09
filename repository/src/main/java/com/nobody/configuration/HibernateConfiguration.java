@@ -54,8 +54,7 @@ public class HibernateConfiguration {
     private String getUrl() throws URISyntaxException {
         final String dbName = "db3ddcsf3dfh7c";
         final String urlPrefix = "jdbc:postgresql://";
-        URI dbUri = new URI(System.getenv("DATABASE_URL"));
-//        URI dbUri = new URI("postgres://prfaglnvxrezui:9995f601a4287a1c985de90a7fdaba95624a5270dd1d45554476f4b9f1ee31b3@ec2-52-3-2-245.compute-1.amazonaws.com:5432/db3ddcsf3dfh7c");
+        URI dbUri = getUri();
         String host =dbUri.getHost();
         int port =dbUri.getPort();
         String username = dbUri.getUserInfo().split(":")[0];
@@ -64,14 +63,17 @@ public class HibernateConfiguration {
     }
 
     private String getUsername() throws URISyntaxException {
-        URI dbUri = new URI(System.getenv("DATABASE_URL"));
-//        URI dbUri = new URI("postgres://prfaglnvxrezui:9995f601a4287a1c985de90a7fdaba95624a5270dd1d45554476f4b9f1ee31b3@ec2-52-3-2-245.compute-1.amazonaws.com:5432/db3ddcsf3dfh7c");
+        URI dbUri = getUri();
         return dbUri.getUserInfo().split(":")[0];
     }
 
     private String getPassword() throws URISyntaxException {
-        URI dbUri = new URI(System.getenv("DATABASE_URL"));
-//        URI dbUri = new URI("postgres://prfaglnvxrezui:9995f601a4287a1c985de90a7fdaba95624a5270dd1d45554476f4b9f1ee31b3@ec2-52-3-2-245.compute-1.amazonaws.com:5432/db3ddcsf3dfh7c");
+        URI dbUri = getUri();
         return dbUri.getUserInfo().split(":")[1];
+    }
+
+    private URI getUri() throws URISyntaxException {
+//        return new URI(System.getenv("DATABASE_URL"));
+        return new URI("postgres://prfaglnvxrezui:9995f601a4287a1c985de90a7fdaba95624a5270dd1d45554476f4b9f1ee31b3@ec2-52-3-2-245.compute-1.amazonaws.com:5432/db3ddcsf3dfh7c");
     }
 }

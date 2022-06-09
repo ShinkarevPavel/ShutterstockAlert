@@ -12,6 +12,7 @@ public class TelegramCredentialsSaver {
 
     @Getter
     @Setter
+    @InjectTelegramCredentials
     private String botName;
 
     @Getter
@@ -23,4 +24,5 @@ public class TelegramCredentialsSaver {
     @Setter
     @InjectTelegramCredentials
     private String chatId;
+
 }

@@ -118,12 +118,11 @@ public class TelegramServiceImpl implements BaseEntityService<TelegramBotCredent
         }
     }
 
-    // TODO test this method
     private void setCredentials(TelegramBotCredentialsDto credentials) {
         telegramCredentialsSaver.setToken(credentials.getToken());
         telegramCredentialsSaver.setChatId(credentials.getChatId());
     }
-    // TODO test this method
+
     private void removeCredentials() {
         telegramCredentialsSaver.setToken(null);
         telegramCredentialsSaver.setChatId(null);

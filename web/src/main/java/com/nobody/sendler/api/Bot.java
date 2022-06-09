@@ -34,7 +34,7 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "@nobodysShutterBot"; //TODO
+        return telegramCredentialsSaver.getBotName();
     }
 
     @Override
@@ -110,7 +110,7 @@ public class Bot extends TelegramLongPollingBot {
         secondsInterval.setCallbackData("seconds");
 
         minutesInterval.setText("30min");
-        minutesInterval.setCallbackData("minutesInterval");
+        minutesInterval.setCallbackData("30min");
 
         hourInterval.setText("hour");
         hourInterval.setCallbackData("hour");
@@ -118,18 +118,18 @@ public class Bot extends TelegramLongPollingBot {
         twoHourInterval.setText("2hours");
         twoHourInterval.setCallbackData("2hour");
 
-        // ***   ***  ***   ***  ***   ***  //
+        // ***   ***  ***   ***  ***   *** //
         List<InlineKeyboardButton> buttons = new ArrayList<>();
         buttons.add(secondsInterval);
         buttons.add(minutesInterval);
         buttons.add(hourInterval);
         buttons.add(twoHourInterval);
 
-        // ***   ***  ***   ***  ***   ***  //
+        // ***   ***  ***   ***  ***   *** //
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(buttons);
 
-        // ***   ***  ***   ***  ***   ***  //
+        // ***   ***  ***   ***  ***   *** //
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         markup.setKeyboard(rowList);
         return SendMessage.builder()
