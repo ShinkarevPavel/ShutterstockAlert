@@ -1,6 +1,6 @@
 package com.nobody.exception;
 
-public class ShutterTelegramApiException extends RuntimeException{
+public class ShutterTelegramApiException extends RuntimeException {
 
     public ShutterTelegramApiException() {
     }

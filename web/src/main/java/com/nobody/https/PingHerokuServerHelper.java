@@ -25,8 +25,6 @@ public class PingHerokuServerHelper {
     @Scheduled(cron = "0 */29 * * * *")
     public void sendRequest() {
         HttpClient httpClient = HttpClients.custom()
-//                .setDefaultRequestConfig(RequestConfig.custom()
-//                        .setCookieSpec(CookieSpecs.STANDARD).build())
                 .build();
         HttpUriRequest request = new HttpGet(URL);
         try {

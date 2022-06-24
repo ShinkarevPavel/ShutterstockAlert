@@ -1,6 +1,6 @@
 package com.nobody.exception;
 
-public class ShutterStockResponseException extends RuntimeException{
+public class ShutterStockResponseException extends RuntimeException {
 
     public ShutterStockResponseException() {
     }

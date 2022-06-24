@@ -1,5 +1,6 @@
 package com.nobody.sendler.api;
 
+import com.nobody.exception.ShutterTelegramApiException;
 import com.nobody.runner.ApplicationScheduler;
 import com.nobody.runner.TaskRunner;
 import com.nobody.saver.TelegramCredentialsSaver;
@@ -50,20 +51,20 @@ public class Bot extends TelegramLongPollingBot {
                     try {
                         execute(sendMainBoard(update.getMessage().getChatId()));
                     } catch (TelegramApiException e) {
-                        //TODO
-                        e.printStackTrace();
+                        throw new ShutterTelegramApiException("Error of sending message.", e);
                     }
                 }
             }
-        } else if (update.hasCallbackQuery()) {
+        }
+
+        if (update.hasCallbackQuery()) {
             String messageKey = update.getCallbackQuery().getData();
             switch (messageKey) {
                 case ("schedule_tapped"):
                     try {
                         execute(sendScheduleBoard(update.getCallbackQuery().getFrom().getId()));
                     } catch (TelegramApiException e) {
-                        //TODO
-                        e.printStackTrace();
+                        throw new ShutterTelegramApiException("Error of sending message.", e);
                     }
                     break;
                 case ("daily_tapped"):
@@ -73,14 +74,14 @@ public class Bot extends TelegramLongPollingBot {
                     sendMonthEarnings();
                     break;
                 default:
-                    changeSchedule(messageKey);//TODO check pattern
+                    changeSchedule(messageKey); // this place can be extended and default case should be changed
                     try {
                         execute(SendMessage.builder()
                                 .text("Pattern was changed on " + messageKey)
                                 .chatId(String.valueOf(update.getCallbackQuery().getFrom().getId()))
                                 .build());
                     } catch (TelegramApiException e) {
-                        e.printStackTrace(); // TODO
+                        throw new ShutterTelegramApiException("Error of sending message.", e);
                     }
                     break;
             }

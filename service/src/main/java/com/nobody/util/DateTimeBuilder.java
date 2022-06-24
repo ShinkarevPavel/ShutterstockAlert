@@ -32,5 +32,4 @@ public class DateTimeBuilder {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         return mst.format(formatter);
     }
-
 }

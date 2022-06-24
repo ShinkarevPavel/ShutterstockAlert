@@ -16,5 +16,4 @@ public class DailyEarningsDto extends BaseDto {
     private Photo photo;
     private Video video;
     private List<Category> categories;
-
 }

@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class ScheduleDto {
-
     @NotNull
     private String accessKey;
     @NotNull

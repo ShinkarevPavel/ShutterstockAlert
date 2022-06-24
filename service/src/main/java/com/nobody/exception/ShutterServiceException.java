@@ -1,6 +1,6 @@
 package com.nobody.exception;
 
-public class ShutterServiceException extends RuntimeException{
+public class ShutterServiceException extends RuntimeException {
     public ShutterServiceException() {
         super();
     }

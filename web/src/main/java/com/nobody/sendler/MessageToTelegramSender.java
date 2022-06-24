@@ -18,7 +18,7 @@ import java.time.Duration;
 
 @Component
 public class MessageToTelegramSender {
-    private static final Logger logger = LogManager.getLogger();
+    private final Logger logger = LogManager.getLogger();
     private TelegramCredentialsSaver telegramCredentialsSaver;
 
     @Autowired
@@ -51,7 +51,6 @@ public class MessageToTelegramSender {
             logger.log(Level.ERROR, "Error from MessageToTelegramSender " + e.getMessage());
         }
     }
-
 
     private String buildTextMessage(BaseDto dto) {
         return PrepareMessageForTelegramFromDto.buildMessage(dto);

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1")
 public class ScheduleController {
 
-
     private CronPatternChangerServiceImpl cronPatternChangerService;
     private ApplicationScheduler applicationScheduler;
 
@@ -20,7 +19,6 @@ public class ScheduleController {
         this.cronPatternChangerService = cronPatternChangerService;
         this.applicationScheduler = applicationScheduler;
     }
-
 
     @PostMapping("/schedule")
     @ResponseStatus(HttpStatus.OK)

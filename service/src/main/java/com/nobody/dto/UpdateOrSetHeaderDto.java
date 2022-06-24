@@ -1,6 +1,5 @@
 package com.nobody.dto;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -28,5 +27,4 @@ public class UpdateOrSetHeaderDto extends BaseDto {
 
     @NotNull(groups = {Create.class, Update.class})
     private String headerValue;
-
 }

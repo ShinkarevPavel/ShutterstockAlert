@@ -68,7 +68,8 @@ public class TelegramServiceImpl implements BaseEntityService<TelegramBotCredent
         telegramCredentials.setToken(telegramBotCredentialsDto.getToken());
         telegramCredentials.setChatId(telegramBotCredentialsDto.getChatId() != null ?
                 telegramBotCredentialsDto.getChatId() : telegramCredentials.getChatId());
-
+        telegramCredentials.setBotName(telegramBotCredentialsDto.getBotName() != null ?
+                telegramBotCredentialsDto.getBotName() : telegramCredentials.getBotName());
         setCredentials(TelegramCredentialsMapper.entityToDto((telegramCredentials))); // update telegram credentials in saver
         return TelegramCredentialsMapper.entityToDto(telegramDao.updateEntity(telegramCredentials));
     }
@@ -121,10 +122,12 @@ public class TelegramServiceImpl implements BaseEntityService<TelegramBotCredent
     private void setCredentials(TelegramBotCredentialsDto credentials) {
         telegramCredentialsSaver.setToken(credentials.getToken());
         telegramCredentialsSaver.setChatId(credentials.getChatId());
+        telegramCredentialsSaver.setBotName(credentials.getBotName());
     }
 
     private void removeCredentials() {
         telegramCredentialsSaver.setToken(null);
         telegramCredentialsSaver.setChatId(null);
+        telegramCredentialsSaver.setBotName(null);
     }
 }

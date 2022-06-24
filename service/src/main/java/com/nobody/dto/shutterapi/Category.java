@@ -14,5 +14,4 @@ public class Category {
     private String earnings;
     private String downloads;
     private String type;
-
 }

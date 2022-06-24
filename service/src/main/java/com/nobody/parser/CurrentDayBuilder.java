@@ -45,8 +45,8 @@ public class CurrentDayBuilder {
                 .findFirst()
                 .orElse(DailyEarningsDto.builder()
                         .date(currentDate)
-                        .earnings("still empty :)")
-                        .downloads("still empty :)")
+                        .earnings("still empty:)")
+                        .downloads("still empty:)")
                         .categories(new ArrayList<>()) // NPE workaround
                         .build());
     }
