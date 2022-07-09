@@ -5,6 +5,9 @@ import com.nobody.runner.ApplicationScheduler;
 import com.nobody.runner.TaskRunner;
 import com.nobody.saver.TelegramCredentialsSaver;
 import com.nobody.util.CronPatternChanger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -19,7 +22,7 @@ import java.util.List;
 
 @Component
 public class Bot extends TelegramLongPollingBot {
-
+    private final Logger logger = LogManager.getLogger();
     private TaskRunner taskRunner;
     private CronPatternChanger cronPatternChanger;
     private ApplicationScheduler applicationScheduler;
@@ -45,6 +48,7 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+
         if (update.hasMessage()) {
             if (update.getMessage().hasText()) {
                 if (update.getMessage().getText().equals("/shutter")) {
@@ -102,6 +106,13 @@ public class Bot extends TelegramLongPollingBot {
 
 
     private SendMessage sendScheduleBoard(long chatId) {
+        if (!String.valueOf(chatId).equals(telegramCredentialsSaver.getChatId())) {
+            logger.log(Level.INFO, chatId + " user trying to get access.");
+            return SendMessage.builder()
+                    .chatId(String.valueOf(chatId))
+                    .text("Access denied")
+                    .build();
+        }
         InlineKeyboardButton secondsInterval = new InlineKeyboardButton();
         InlineKeyboardButton minutesInterval = new InlineKeyboardButton();
         InlineKeyboardButton hourInterval = new InlineKeyboardButton();
