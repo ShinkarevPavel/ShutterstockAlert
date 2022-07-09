@@ -48,7 +48,6 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-
         if (update.hasMessage()) {
             if (update.getMessage().hasText()) {
                 if (update.getMessage().getText().equals("/shutter")) {
@@ -62,57 +61,47 @@ public class Bot extends TelegramLongPollingBot {
         }
 
         if (update.hasCallbackQuery()) {
+            Long id = update.getCallbackQuery().getFrom().getId();
+            logger.log(Level.INFO, id + " user trying to get access.");
             String messageKey = update.getCallbackQuery().getData();
-            switch (messageKey) {
-                case ("schedule_tapped"):
-                    try {
-                        execute(sendScheduleBoard(update.getCallbackQuery().getFrom().getId()));
-                    } catch (TelegramApiException e) {
-                        throw new ShutterTelegramApiException("Error of sending message.", e);
-                    }
-                    break;
-                case ("daily_tapped"):
-                    sendDailyEarnings();
-                    break;
-                case ("month_tapped"):
-                    sendMonthEarnings();
-                    break;
-                default:
-                    changeSchedule(messageKey); // this place can be extended and default case should be changed
-                    try {
-                        execute(SendMessage.builder()
-                                .text("Pattern was changed on " + messageKey)
-                                .chatId(String.valueOf(update.getCallbackQuery().getFrom().getId()))
-                                .build());
-                    } catch (TelegramApiException e) {
-                        throw new ShutterTelegramApiException("Error of sending message.", e);
-                    }
-                    break;
+            if (String.valueOf(id).equals(this.telegramCredentialsSaver.getChatId())) {
+                switch (messageKey) {
+                    case ("schedule_tapped"):
+                        try {
+                            execute(sendScheduleBoard(id));
+                        } catch (TelegramApiException e) {
+                            throw new ShutterTelegramApiException("Error of sending message.", e);
+                        }
+                        break;
+                    case ("daily_tapped"):
+                        sendDailyEarnings();
+                        break;
+                    case ("month_tapped"):
+                        sendMonthEarnings();
+                        break;
+                    default:
+                        changeSchedule(messageKey); // this place can be extended and default case should be changed
+                        try {
+                            execute(SendMessage.builder()
+                                    .text("Pattern was changed on " + messageKey)
+                                    .chatId(String.valueOf(id))
+                                    .build());
+                        } catch (TelegramApiException e) {
+                            throw new ShutterTelegramApiException("Error of sending message.", e);
+                        }
+                        break;
+                }
+            } else {
+                try {
+                    execute(accessDenied(id));
+                } catch (TelegramApiException e) {
+                    throw new ShutterTelegramApiException("Error of sending message.", e);
+                }
             }
         }
     }
 
-    private void changeSchedule(String pattern) {
-        applicationScheduler.reSchedule(cronPatternChanger.setPattern(pattern));
-    }
-
-    private void sendDailyEarnings() {
-        taskRunner.run();
-    }
-
-    private void sendMonthEarnings() {
-        taskRunner.runMonth();
-    }
-
-
     private SendMessage sendScheduleBoard(long chatId) {
-        if (!String.valueOf(chatId).equals(telegramCredentialsSaver.getChatId())) {
-            logger.log(Level.INFO, chatId + " user trying to get access.");
-            return SendMessage.builder()
-                    .chatId(String.valueOf(chatId))
-                    .text("Access denied")
-                    .build();
-        }
         InlineKeyboardButton secondsInterval = new InlineKeyboardButton();
         InlineKeyboardButton minutesInterval = new InlineKeyboardButton();
         InlineKeyboardButton hourInterval = new InlineKeyboardButton();
@@ -180,5 +169,24 @@ public class Bot extends TelegramLongPollingBot {
                 .text("Actions")
                 .replyMarkup(markup)
                 .build();
+    }
+
+    private SendMessage accessDenied(Long chatId) {
+        return SendMessage.builder()
+                .chatId(String.valueOf(chatId))
+                .text("Access Denied.")
+                .build();
+    }
+
+    private void changeSchedule(String pattern) {
+        applicationScheduler.reSchedule(cronPatternChanger.setPattern(pattern));
+    }
+
+    private void sendDailyEarnings() {
+        taskRunner.run();
+    }
+
+    private void sendMonthEarnings() {
+        taskRunner.runMonth();
     }
 }
