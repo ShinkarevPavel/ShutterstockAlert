@@ -94,7 +94,7 @@ public class Bot extends TelegramLongPollingBot {
             } else {
                 try {
                     execute(accessDenied(id));
-                    alertToAdmin(id);
+                    execute(alertToAdmin(id));
                 } catch (TelegramApiException e) {
                     throw new ShutterTelegramApiException("Error of sending message.", e);
                 }
