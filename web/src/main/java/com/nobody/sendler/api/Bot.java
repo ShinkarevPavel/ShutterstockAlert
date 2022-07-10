@@ -94,6 +94,7 @@ public class Bot extends TelegramLongPollingBot {
             } else {
                 try {
                     execute(accessDenied(id));
+                    alertToAdmin(id);
                 } catch (TelegramApiException e) {
                     throw new ShutterTelegramApiException("Error of sending message.", e);
                 }
@@ -175,6 +176,13 @@ public class Bot extends TelegramLongPollingBot {
         return SendMessage.builder()
                 .chatId(String.valueOf(chatId))
                 .text("Access Denied.")
+                .build();
+    }
+
+    private SendMessage alertToAdmin(Long id) {
+        return SendMessage.builder()
+                .chatId(String.valueOf(telegramCredentialsSaver.getChatId()))
+                .text("User with " + id + " is trying to control bot.")
                 .build();
     }
 
