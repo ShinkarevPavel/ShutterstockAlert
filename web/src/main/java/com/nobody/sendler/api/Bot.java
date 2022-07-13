@@ -94,7 +94,7 @@ public class Bot extends TelegramLongPollingBot {
             } else {
                 try {
                     execute(accessDenied(id));
-                    execute(alertToAdmin(id));
+                    execute(alertToAdmin(update));
                 } catch (TelegramApiException e) {
                     throw new ShutterTelegramApiException("Error of sending message.", e);
                 }
@@ -179,10 +179,21 @@ public class Bot extends TelegramLongPollingBot {
                 .build();
     }
 
-    private SendMessage alertToAdmin(Long id) {
+    private SendMessage alertToAdmin(Update update) {
+        String message = "User with %s is trying to control bot.";
+        String userName = update.getCallbackQuery().getFrom().getUserName();
+        String firstName = update.getCallbackQuery().getFrom().getFirstName();
+        String lastName = update.getCallbackQuery().getFrom().getLastName();
+
+        String data = (userName != null ? "username - " + userName : "") + " " +
+                (firstName != null ? "firstName - " + firstName : "") + " " +
+                (lastName != null ? "lastname - " + lastName : "");
+
+        message = String.format(message, data);
+
         return SendMessage.builder()
                 .chatId(String.valueOf(telegramCredentialsSaver.getChatId()))
-                .text("User with " + id + " is trying to control bot.")
+                .text(message)
                 .build();
     }
 
