@@ -185,9 +185,9 @@ public class Bot extends TelegramLongPollingBot {
         String firstName = update.getCallbackQuery().getFrom().getFirstName();
         String lastName = update.getCallbackQuery().getFrom().getLastName();
 
-        String data = (userName != null ? "username - " + userName : "") + " " +
-                (firstName != null ? "firstName - " + firstName : "") + " " +
-                (lastName != null ? "lastname - " + lastName : "");
+        String data = (userName != null ? "username - " + userName : "") + "\n" +
+                      (firstName != null ? "firstName - " + firstName : "") + "\n" +
+                      (lastName != null ? "lastname - " + lastName : "");
 
         message = String.format(message, data);
 
