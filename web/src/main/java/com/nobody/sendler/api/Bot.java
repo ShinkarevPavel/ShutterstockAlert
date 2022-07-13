@@ -180,14 +180,14 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private SendMessage alertToAdmin(Update update) {
-        String message = "User with %s is trying to control bot.";
         String userName = update.getCallbackQuery().getFrom().getUserName();
         String firstName = update.getCallbackQuery().getFrom().getFirstName();
         String lastName = update.getCallbackQuery().getFrom().getLastName();
 
+        String message = "User with %s is trying to control bot.";
         String data = (userName != null ? "username - " + userName : "") + "\n" +
                       (firstName != null ? "firstName - " + firstName : "") + "\n" +
-                      (lastName != null ? "lastname - " + lastName : "");
+                      (lastName != null ? "lastname - " + lastName : "") + "\n";
 
         message = String.format(message, data);
 
