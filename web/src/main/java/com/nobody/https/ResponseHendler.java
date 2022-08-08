@@ -58,6 +58,7 @@ public class ResponseHendler {
         String year = DateTimeBuilder.getYear();
         String month = DateTimeBuilder.getMonth();
         this.URL = String.format(this.URL, year, month);
+        logger.log(Level.DEBUG, "URL is " + URL);
     }
 
     private HttpUriRequest configRequest(HttpUriRequest request) {

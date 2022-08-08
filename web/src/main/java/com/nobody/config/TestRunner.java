@@ -35,12 +35,12 @@ public class TestRunner extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(TestRunner.class, args);
-        try {
-            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-            telegramBotsApi.registerBot(bot());
-        } catch (TelegramApiException e) {
-            throw new ShutterTelegramApiException("Error of telegram bot starting. " + e.getMessage(), e);
-        }
+//        try {
+//            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+//            telegramBotsApi.registerBot(bot());
+//        } catch (TelegramApiException e) {
+//            throw new ShutterTelegramApiException("Error of telegram bot starting. " + e.getMessage(), e);
+//        }
     }
 
     private static Bot bot() {

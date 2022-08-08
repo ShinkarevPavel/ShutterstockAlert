@@ -11,7 +11,6 @@ import java.util.concurrent.ScheduledFuture;
 
 @Component
 public class ApplicationScheduler {
-    private final String LAUNCH_CRON = "0 0 * * * *";
     private ScheduledFuture scheduledFuture;
     private ConcurrentTaskScheduler taskScheduler;
 
@@ -44,6 +43,7 @@ public class ApplicationScheduler {
 
     @PostConstruct
     public void initializeScheduler() {
-        this.reSchedule(LAUNCH_CRON);
+        String launchCron = "0 0 * * * *";
+        this.reSchedule(launchCron);
     }
 }
