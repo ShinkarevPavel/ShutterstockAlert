@@ -98,6 +98,7 @@ public class ScheduleSettingsServiceImpl implements BaseEntityService<ScheduleSe
   @Transactional
   public String getPatternAndSetItCurrent(String name) {
    ScheduleSettings settings = returnIfExist(name);
+   changeCurrentStatusOnFalseInSettings();
    setCurrent(settings);
    return settings.getValue();
  }
