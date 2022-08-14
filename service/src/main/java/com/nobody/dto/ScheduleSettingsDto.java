@@ -32,10 +32,11 @@ public class ScheduleSettingsDto {
     @NotNull(groups = {Create.class, Update.class, Delete.class})
     private String name;
 
+    @NotNull(groups = {Create.class, Update.class})
     @Null(groups = Change.class)
     private String value;
 
-    @NotNull(groups = {Create.class, Update.class, Delete.class})
+    @NotNull(groups = {Create.class})
     @Null(groups = Change.class)
     private Boolean isCurrent;
 }
