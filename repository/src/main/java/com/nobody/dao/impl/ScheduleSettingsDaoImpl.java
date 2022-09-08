@@ -61,6 +61,10 @@ public class ScheduleSettingsDaoImpl implements BaseDao<ScheduleSettings> {
         .executeUpdate();
   }
 
+  public void addToPersistence(ScheduleSettings settings) {
+    session.merge(settings);
+  }
+
   public Optional<ScheduleSettings> getCurrent() {
     return Optional.ofNullable(
         session

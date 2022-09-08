@@ -10,13 +10,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class CommonDtoBuilder extends BaseDto {
 
-    public MonthlyEarningsDto buildDto(String response) {
-        MonthlyEarningsDto monthlyEarningsDto;
-        try {
-           monthlyEarningsDto = new ObjectMapper().readValue(response, MonthlyEarningsDto.class);
-        } catch (JsonProcessingException e) {
-            throw new ShutterStockParseException("Error of parse shutterstocks common dto." + e.getMessage());
-        }
-        return monthlyEarningsDto;
+  public MonthlyEarningsDto buildDto(String response) {
+    MonthlyEarningsDto monthlyEarningsDto;
+    try {
+      monthlyEarningsDto = new ObjectMapper().readValue(response, MonthlyEarningsDto.class);
+    } catch (JsonProcessingException e) {
+      throw new ShutterStockParseException(
+          "Error of parse shutterstock's common dto." + e.getMessage());
     }
+    return monthlyEarningsDto;
+  }
 }

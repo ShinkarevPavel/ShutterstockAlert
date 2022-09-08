@@ -1,12 +1,17 @@
 package com.nobody.runner;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nobody.dto.shutterapi.MonthlyEarningsDto;
 import com.nobody.https.ResponseHendler;
 import com.nobody.parser.CommonDtoBuilder;
 import com.nobody.parser.CurrentDayBuilder;
 import com.nobody.sendler.MessageToTelegramSender;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class TaskRunner implements Runnable {
@@ -28,6 +33,7 @@ public class TaskRunner implements Runnable {
     this.currentDayBuilder = currentDayBuilder;
   }
 
+  @SneakyThrows
   @Override
   public void run() {
     String response = responseHendler.sendRequest();

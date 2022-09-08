@@ -13,9 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class MonthlyEarningsDto extends BaseDto {
-    private List<DailyEarningsDto> days;
-    private String earnings;
-    private String downloads;
-    private Photo photo;
-    private Video video;
+  private List<DailyEarningsDto> days;
+  private String earnings;
+  private String downloads;
+  private MonthCategories categories;
 }

@@ -29,6 +29,9 @@ public class ScheduleSettingsServiceImpl implements BaseEntityService<ScheduleSe
   public String changePattern(ScheduleSettingsDto scheduleSettingsDto) {
     checkKey(scheduleSettingsDto.getAccessKey());
     ScheduleSettings settings = returnIfExist(scheduleSettingsDto.getName());
+    if (settings.getIsCurrent()) {
+        return settings.getValue();
+    }
     changeCurrentStatusOnFalseInSettings();
     setCurrent(settings);
     return settings.getValue();
@@ -106,6 +109,7 @@ public class ScheduleSettingsServiceImpl implements BaseEntityService<ScheduleSe
   public void setCurrent(ScheduleSettings settings) {
     // this method should change schedule status in DB
     settings.setIsCurrent(true);
+    settingsDao.addToPersistence(settings);
   }
 
   public String getCurrentSetting() {
