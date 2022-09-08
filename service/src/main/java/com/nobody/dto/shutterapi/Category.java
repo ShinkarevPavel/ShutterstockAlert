@@ -1,17 +1,40 @@
-package com.nobody.dto.shutterapi;
+package com.nobody.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-public class Category {
-    private String name;
-    private String earnings;
+@JsonDeserialize(using = CategoryEnumDeserializer.class)
+public enum Category {
+    @JsonProperty("25_a_day")
+    SUBSCRIPTION,
+    @JsonProperty("on_demand")
+    ON_DEMAND,
+    @JsonProperty("enhanced")
+    ENHANCED,
+    @JsonProperty("single_image_and_other")
+    SINGLES,
+    @JsonProperty("cart_sales")
+    CART_SALES,
+    @JsonProperty("clip_packs")
+    CLIP_PACKS,
+    @JsonProperty("footage_enhanced")
+    FOOTAGE_ENHANCED,
+    @JsonProperty("contributor_image_referrals")
+    CONTRIBUTOR_IMAGE_REFERRALS,
+    @JsonProperty("contributor_video_referrals")
+    CONTRIBUTOR_VIDEO_REFERRALS,
+    @JsonProperty("customer_referrals")
+    CUSTOMER_REFERRALS;
+
+
     private String downloads;
-    private String type;
+    private String earnings;
+
+    Category() {
+    }
+
+    Category(String downloads, String earnings) {
+        this.downloads = downloads;
+        this.earnings = earnings;
+    }
 }
