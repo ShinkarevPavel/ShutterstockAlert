@@ -8,6 +8,4 @@ import lombok.ToString;
 public class Category {
   private String downloads;
   private String earnings;
-
-
 }
