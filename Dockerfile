@@ -1,4 +1,4 @@
 FROM openjdk:11
 MAINTAINER nobody.com
-COPY ./target/web-1.0-SNAPSHOT.jar /app/app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+#COPY web/target/web-1.0-SNAPSHOT.jar /app.jar
+ENTRYPOINT ["java","-jar","./web-1.0-SNAPSHOT.jar"]
