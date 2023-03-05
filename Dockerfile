@@ -3,4 +3,4 @@ RUN mkdir /project
 COPY . /project
 WORKDIR /project
 RUN mvn clean package -DskipTests
-CMD ["java", "-jar", "target/web-1.0-SNAPSHOT.jar"]
+CMD ["java", "-jar", "web/target/web-1.0-SNAPSHOT.jar"]
