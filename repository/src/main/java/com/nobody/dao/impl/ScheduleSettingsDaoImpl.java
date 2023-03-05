@@ -56,7 +56,7 @@ public class ScheduleSettingsDaoImpl implements BaseDao<ScheduleSettings> {
   public void changeStatusOnFalse() {
     session
         .createNativeQuery(
-            "UPDATE public.schedule_settings SET is_current = false WHERE is_current = true",
+            "UPDATE schedule_settings SET is_current = false WHERE is_current = true",
             ScheduleSettings.class)
         .executeUpdate();
   }

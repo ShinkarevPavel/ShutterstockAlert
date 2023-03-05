@@ -49,4 +49,7 @@ public class MonthCategories {
   @JsonIgnore
   private Category customer_referrals;
 
+  @JsonProperty("earning_pools_commission")
+  @JsonIgnore
+  private Category earning_pools_commission;
 }

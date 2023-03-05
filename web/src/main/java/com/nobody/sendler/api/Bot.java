@@ -122,8 +122,8 @@ public class Bot extends TelegramLongPollingBot {
     hourInterval.setText("1 Hour");
     hourInterval.setCallbackData("hour");
 
-    twoHourInterval.setText("2 Hours");
-    twoHourInterval.setCallbackData("2hour");
+    twoHourInterval.setText("3 Hours");
+    twoHourInterval.setCallbackData("3hour");
 
     // ***   ***  ***   ***  ***   *** //
     List<InlineKeyboardButton> buttons = new ArrayList<>();

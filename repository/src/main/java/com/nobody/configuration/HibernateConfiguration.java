@@ -35,12 +35,8 @@ public class HibernateConfiguration {
   }
 
   @Bean
-  public DataSource dataSource() throws URISyntaxException {
-    HikariDataSource dataSource = new HikariDataSource();
-    dataSource.setUsername(getUsername());
-    dataSource.setPassword(getPassword());
-    dataSource.setJdbcUrl(getUrl());
-    return dataSource;
+  public DataSource dataSource() {
+    return new HikariDataSource();
   }
 
   private Properties hibernateProperties() throws URISyntaxException {
@@ -48,41 +44,9 @@ public class HibernateConfiguration {
     properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
     properties.setProperty("hibernate.show_sql", "true");
     properties.setProperty("hibernate.format_sql", "true");
-    properties.setProperty("hibernate.connection.url", getUrl());
+    properties.setProperty(
+        "hibernate.connection.url",
+        "jdbc:postgresql://ep-orange-cherry-254155.eu-central-1.aws.neon.tech/neondb?user=pavelshinkarev209&password=9CK0MypRbPYt");
     return properties;
-  }
-
-  private String getUrl() throws URISyntaxException {
-    final String dbName = "db3ddcsf3dfh7c";
-    final String urlPrefix = "jdbc:postgresql://";
-    URI dbUri = getUri();
-    String host = dbUri.getHost();
-    int port = dbUri.getPort();
-    String username = dbUri.getUserInfo().split(":")[0];
-    String password = dbUri.getUserInfo().split(":")[1];
-    return urlPrefix
-        + host
-        + ":"
-        + port
-        + "/"
-        + dbName
-        + "?sslmode=require&user="
-        + username
-        + "&password="
-        + password;
-  }
-
-  private String getUsername() throws URISyntaxException {
-    URI dbUri = getUri();
-    return dbUri.getUserInfo().split(":")[0];
-  }
-
-  private String getPassword() throws URISyntaxException {
-    URI dbUri = getUri();
-    return dbUri.getUserInfo().split(":")[1];
-  }
-
-  private URI getUri() throws URISyntaxException {
-    return new URI(System.getenv("DATABASE_URL"));
   }
 }
