@@ -1,5 +1,5 @@
 FROM openjdk:11
 MAINTAINER nobody.com
-COPY web/target/web-1.0-SNAPSHOT.jar /tmp
+COPY --from=builder web/target/web-1.0-SNAPSHOT.jar web-1.0-SNAPSHOT.jar
 WORKDIR /tmp
-ENTRYPOINT ["java","-jar"]
+ENTRYPOINT ["java","-jar", "web-1.0-SNAPSHOT.jar"]
