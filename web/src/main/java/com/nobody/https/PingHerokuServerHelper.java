@@ -22,7 +22,7 @@ public class PingHerokuServerHelper {
     private static final Logger logger = LogManager.getLogger();
     private final String URL = "https://shutter-application.herokuapp.com/api/v1/ping";
 
-    @Scheduled(cron = "0 */29 * * * *")
+    @Scheduled(cron = "0 */10 * * * *")
     public void sendRequest() {
         HttpClient httpClient = HttpClients.custom()
                 .build();
